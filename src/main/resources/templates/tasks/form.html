@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>タスクフォーム</title>
+    <style>
+        body { font-family: sans-serif; max-width: 700px; margin: 2rem auto; }
+        label { display: block; margin-top: 1rem; }
+        input[type="text"], textarea { width: 100%; padding: .5rem; box-sizing: border-box; }
+        .error { color: red; }
+        .actions { margin-top: 1rem; display: flex; gap: .8rem; }
+    </style>
+</head>
+<body>
+<h1 th:text="${taskId != null} ? 'タスク編集' : 'タスク追加'"></h1>
+
+<form th:action="${formAction}" method="post" th:object="${taskForm}">
+    <label for="title">タイトル</label>
+    <input id="title" type="text" th:field="*{title}">
+    <div class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+
+    <label for="description">説明</label>
+    <textarea id="description" rows="5" th:field="*{description}"></textarea>
+
+    <label>
+        <input type="checkbox" th:field="*{completed}"> 完了
+    </label>
+
+    <div class="actions">
+        <button type="submit">保存</button>
+        <a th:href="@{/tasks}">一覧に戻る</a>
+    </div>
+</form>
+</body>
+</html>
