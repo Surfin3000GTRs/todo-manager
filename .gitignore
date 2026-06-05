@@ -1,0 +1,33 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Java
+*.class
+out/
+
+# Logs
+*.log
+logs/
+
+# Spring Boot runtime files
+*.pid
+*.pid.lock
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Eclipse/STS
+.project
+.classpath
+.settings/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Repository local directory
+inbox/
