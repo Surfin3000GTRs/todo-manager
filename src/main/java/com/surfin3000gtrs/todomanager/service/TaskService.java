@@ -33,7 +33,7 @@ public class TaskService {
     public TaskCommandResult createResult(String title, String description) {
         try {
             Task task = new Task(null, title, description, false, LocalDateTime.now());
-            return new TaskCommandResult.Created(taskRepository.save(task));
+            return new TaskCommandResult.Success(taskRepository.save(task));
         } catch (IllegalArgumentException exception) {
             return new TaskCommandResult.ValidationError(exception.getMessage());
         }
@@ -47,7 +47,7 @@ public class TaskService {
 
         try {
             Task updated = found.get().withContent(title, description);
-            return new TaskCommandResult.Updated(taskRepository.save(updated));
+            return new TaskCommandResult.Success(taskRepository.save(updated));
         } catch (IllegalArgumentException exception) {
             return new TaskCommandResult.ValidationError(exception.getMessage());
         }
@@ -55,16 +55,9 @@ public class TaskService {
 
     public TaskCommandResult complete(long id) {
         return taskRepository.findById(id)
-                .map(task -> (TaskCommandResult) new TaskCommandResult.Completed(
+                .map(task -> (TaskCommandResult) new TaskCommandResult.Success(
                         taskRepository.save(task.withCompleted(true))))
                 .orElseGet(() -> new TaskCommandResult.NotFound(id));
-    }
-
-    public TaskCommandResult deleteResult(long id) {
-        if (taskRepository.deleteById(id)) {
-            return new TaskCommandResult.Deleted(id);
-        }
-        return new TaskCommandResult.NotFound(id);
     }
 
     public boolean delete(long id) {
