@@ -41,8 +41,10 @@ public class JsonTaskRepository implements TaskRepository {
         }
 
         try {
+            if (Files.size(storagePath) == 0L) {
+                return;
+            }
             Task[] persistedTasks = objectMapper.readValue(storagePath.toFile(), Task[].class);
-            for (Task task : persistedTasks) {
                 Task storedTask = normalize(task);
                 tasks.put(storedTask.id(), storedTask);
                 nextId = Math.max(nextId, storedTask.id() + 1L);
