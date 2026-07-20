@@ -34,7 +34,7 @@ public class TaskService {
         try {
             Task task = new Task(null, title, description, false, LocalDateTime.now());
             return new TaskCommandResult.Success(taskRepository.save(task));
-        } catch (IllegalArgumentException exception) {
+        } catch (IllegalArgumentException | NullPointerException exception) {
             return new TaskCommandResult.ValidationError(exception.getMessage());
         }
     }
