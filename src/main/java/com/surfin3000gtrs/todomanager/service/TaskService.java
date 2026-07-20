@@ -48,16 +48,20 @@ public class TaskService {
 
         try {
             Task updated = found.get().withContent(title, description);
-        } catch (IllegalArgumentException | NullPointerException exception) {
+        } catch (IllegalArgumentException | NullPointerException exception) {
+
         } catch (IllegalArgumentException exception) {
             return new TaskCommandResult.ValidationError(exception.getMessage());
         }
     }
 
-    public TaskCommandResult complete(long id) {
-        return taskRepository.findById(id)
-                .map(task -> (TaskCommandResult) new TaskCommandResult.Success(
-                        taskRepository.save(task.withCompleted(true))))
+        Optional<Task> found = taskRepository.findById(id);
+        if (found.isEmpty()) {
+            return new TaskCommandResult.NotFound(id);
+        }
+
+        Task saved = taskRepository.save(found.get().withCompleted(true));
+        return new TaskCommandResult.Success(saved);
                 .orElseGet(() -> new TaskCommandResult.NotFound(id));
     }
 
