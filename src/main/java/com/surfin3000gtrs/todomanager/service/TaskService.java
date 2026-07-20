@@ -34,7 +34,8 @@ public class TaskService {
         try {
             Task task = new Task(null, title, description, false, LocalDateTime.now());
             return new TaskCommandResult.Success(taskRepository.save(task));
-        } catch (IllegalArgumentException | NullPointerException exception) {
+        } catch (IllegalArgumentException | NullPointerException exception) {
+
             return new TaskCommandResult.ValidationError(exception.getMessage());
         }
     }
@@ -47,7 +48,7 @@ public class TaskService {
 
         try {
             Task updated = found.get().withContent(title, description);
-            return new TaskCommandResult.Success(taskRepository.save(updated));
+        } catch (IllegalArgumentException | NullPointerException exception) {
         } catch (IllegalArgumentException exception) {
             return new TaskCommandResult.ValidationError(exception.getMessage());
         }
